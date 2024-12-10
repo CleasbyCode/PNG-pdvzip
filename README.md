@@ -1,102 +1,223 @@
-# pdvzip
-PNG Data Vehicle for Twitter, ZIP Edition (PDVZIP).
+# pdvzip  
 
-Embed a ZIP file of up to ≈5MB within a tweetable and '*executable*' PNG polyglot image.
+Embed a ***ZIP*** or ***JAR*** file within a ***PNG*** image, to create a ***tweetable*** and "[***executable***](https://github.com/CleasbyCode/pdvzip#extracting-your-embedded-files)" ***PNG*** polyglot file.  
+Share the image on ***X/Twitter*** and a few other hosting sites, which will retain the embedded archive.  
 
-Based on a similar idea from the original Python program ['***tweetable-polyglot-png***'](https://github.com/DavidBuchanan314/tweetable-polyglot-png) created by David Buchanan, pdvzip uses different methods for storing and accessing arbitrary data within a PNG image file.
+With ***pdvzip***, you can embed a ***ZIP/JAR*** file up to a maximum size of **2GB** (cover image + archive file).
 
-Compile and run the program under Windows or **Linux**.
+Compatible sites, ***listed below***, have their own ***much smaller*** size limits:-
 
-## Usage
-
-```c
-$ g++ pdvzip.cpp -o pdvzip
-$
-$ ./pdvzip
-
-Usage:  pdvzip  <png_image>  <zip_file>
-        pdvzip  --info
-
-```
-
-Once the ZIP file has been embedded within a PNG image, it's ready to be shared (tweeted) or '*executed*' whenever you want to open/play the media file.
-
-You can also upload and share your PNG image to *some popular image hosting sites, such as [***Flickr***](https://www.flickr.com/), [***ImgBB***](https://imgbb.com/), [***Imgur***](https://imgur.com/a/zF40QMX), [***ImgPile***](https://imgpile.com/), [***ImageShack***](https://imageshack.com/), [***PostImage***](https://postimg.cc/xcCcvpLJ), etc. **Not all image hosting sites are compatible, e.g. [***ImgBox***](https://imgbox.com/), [***Reddit***](https://www.reddit.com/).*
-
-**Mobile Issue**: Sometimes when saving images from Twitter to a mobile, the file gets saved with a '*.jpg*' extension. Please note, the file has not been converted to a JPG. Lazy Twitter has just renamed the extension, so it is still the original PNG image with its embedded content. 
-
-## Accessing Arbitrary Data
-**Linux**    
-Make sure image file has executable permissions.
-```c
-
-$ chmod +x pdv_your_image_file.png
-$
-$ ./pdv_your_image_file.png 
-
-```  
-**Windows**   
-First, rename the '*.png*' file extension to '*.cmd*'.
-```c
-
-G:\demo> ren pdv_your_image_file.png pdv_your_image_file.cmd
-G:\demo>
-G:\demo> .\pdv_your_image_file.cmd
-
-```
-Opening the cmd file from the desktop, on its first run, Windows may display a security warning. Clear this by clicking '***More info***' then select '***Run anyway***'.
-
-For some common video & audio files, Linux requires the '***vlc (VideoLAN)***' application, Windows uses the set default media player.  
-PDF '*.pdf*', Linux requires the '***evince***' application, Windows uses the set default PDF viewer.  
-Python '*.py*', Linux & Windows use the '***python3***' command to run these programs.  
-PowerShell '*.ps1*', Linux uses the '***pwsh***' command (if PowerShell installed), Windows uses '***powershell***' to run these scripts.
-
-For any other media type/file extension, Linux & Windows will rely on the operating system's set default application.  
+***X/Twitter*** (**5MB**), ***Flickr*** (**200MB**), ***ImgBB*** (**32MB**), ***PostImage*** (**32MB**), ***ImgPile*** (**8MB**).
   
-To just get access to the file(s) within the ZIP archive, rename the '*.png*' file extension to '*.zip*'. Treat the ZIP archive as read-only, do not add or remove files from the PNG-ZIP polyglot file.
+![Demo Image](https://github.com/CleasbyCode/pdvzip/blob/main/demo_image/pzip_83973.png)  
+***Image credit:*** [***@obeca***](https://x.com/obeca)
+ 
+Based on the similar idea by [***David Buchanan***](https://www.da.vidbuchanan.co.uk/), from his original ***Python*** program [***tweetable-polyglot-png***](https://github.com/DavidBuchanan314/tweetable-polyglot-png),  
+***pdvzip*** uses different methods for [***storing***](https://github.com/CleasbyCode/pdvzip#png-image-requirements-for-arbitrary-data-preservation) and [***extracting***](https://github.com/CleasbyCode/pdvzip#extracting-your-embedded-files) embedded files within a ***PNG*** image.  
 
-**Image Examples**  
+The ***Linux/Windows*** extraction script is stored within the ***iCCP*** chunk of the ***PNG*** image. The embedded ***ZIP/JAR*** file is stored within the last ***IDAT*** chunk of the image.  
 
-1. [Twitter. Tweet contains four images. Embedded with (TL) Python, (TR) MP3, (BL) PDF, (BR) MP4](https://twitter.com/CleasbyCode/status/1579418557762322432)
-2. [Imgur. This image contains an embedded zip/PDF document](https://imgur.com/a/zF40QMX)
-3. [PostImages. This image contains an embedded zip/JPG image](https://postimg.cc/xcCcvpLJ) (**Always select: "*Download original image***")
+(*You can try the [***pdvzip Web App, here,***](https://cleasbycode.co.uk/pdvzip/index/) if you don't want to download and compile the CLI source code.*)  
 
-**Video Examples (YouTube)**
-1. [MP4 Video (Linux & Windows Demo)](https://www.youtube.com/watch_popup?v=19hi4_UFICI) 
-2. [Python Program (Linux & Windows Demo)](https://www.youtube.com/watch_popup?v=wYEUT7DidbM)
-3. [PDF Document (Windows & Linux Demo)](https://www.youtube.com/watch_popup?v=u32zvWSLqto)  
+## Usage (Linux)
+
+```console
+user1@linuxbox:~/Downloads/pdvzip-main/src$ g++ main.cpp -O2 -s -o pdvzip
+user1@linuxbox:~/Downloads/pdvzip-main/src$ sudo cp pdvzip /usr/bin
+
+user1@linuxbox:~/Desktop$ pdvzip
+
+Usage: pdvzip <cover_image> <zip/jar>
+       pdvzip --info
+
+user1@linuxbox:~/Desktop$ pdvzip my_cover_image.png document_pdf.zip
+
+Created PNG-ZIP polyglot image file: pzip_55183.png (4038367 bytes).
+
+Complete!
+
+user1@linuxbox:~/Desktop$ pdvzip my_cover_image.png hello_world.jar
+
+Created PNG-JAR polyglot image file: pjar_19662.png (1016336 bytes).
+
+Complete!
+
+``` 
+## Extracting Your Embedded File(s)  
+**Important:** When saving images from ***X/Twitter***, click the image in the post to ***fully expand it***, before saving.  
+
+The following section covers the extraction of embedded ***ZIP*** files. ***JAR*** files are covered later.
+
+***pdvzip*** (for ***Linux***) will attempt to ***automatically set executable permissions*** on newly created polyglot image files.  
+
+You will need to manually set executable permissions using ***chmod*** on these polyglot images downloaded from hosting sites.
+
+https://github.com/user-attachments/assets/d4d28f3b-0583-4a63-bc95-e905b6386411
+
+***Linux - using bash (or sh) shell environment.***
+```console
+
+user1@linuxbox:~/Desktop$ ./pzip_55183.png
+
+```
+**For any other Linux shell environment, you will probably need to invoke bash (or sh) to run the image file.**
+```console
+
+linuxbox% bash ./pzip_55183.png 
+
+``` 
+Alternative extraction (***Linux***).  Using ***wget*** to download and run the image directly from the hosting site.  
+***X/Twitter*** ***wget*** example: **Image with embedded ***python*** script**.
+```console
+
+wget -O Fibo.png "https://pbs.twimg.com/media/GLXTYeCWMAAA6B_.png";chmod +x Fibo.png;bash ./Fibo.png
+
+```   
+
+**Windows** ***(Rename the image file extension to '.cmd')***
+```console
+
+G:\demo> ren pzip_55183.png pzip_55183.cmd
+G:\demo> .\pzip_55183.cmd
+
+```
+Alternative extraction (***Windows***).  Using ***iwr*** to download and run the image directly from the hosting site.  
+***Flickr*** ***iwr*** example: **Image with embedded mp4 video file.**
+```console
+
+iwr -o swing.cmd "https://live.staticflickr.com/65535/54025688614_2f9d474cba_o_d.png";.\swing.cmd
+
+```
+
+Opening the ***.cmd*** file from the desktop, on its first run, ***Windows*** may display a security warning.  
+Clear this by clicking '***More info***' then select '***Run anyway***'.  
+
+To avoid security warnings, run the file from a ***Windows console***, as shown in the above example.  
+
+For common ***video & audio*** files, ***Linux*** will use the ***vlc*** or ***mpv*** media player. ***Windows*** uses the default media player.  
+
+***PDF*** - ***Linux*** will use ***evince*** or ***firefox***. ***Windows*** uses the default ***PDF*** viewer.  
+***Python*** - ***Linux*** & ***Windows*** use ***python3*** to run these programs.  
+***PowerShell*** - ***Linux*** uses ***pwsh*** (if installed), ***Windows*** uses either ***powershell.exe*** or ***pwsh.exe*** to run these scripts.
+***Folder*** - ***Linux*** uses ***xdg-open***, ***Windows*** uses ***powershell.exe*** with II (***Invoke-Item***) command, to open zipped folders.
+
+For any other file type within your ***ZIP*** file, ***Linux*** & ***Windows*** will rely on the operating system's set default method/application. Obviously, the compressed/embedded file needs to be compatible with the operating system you run it on.
+
+If the archive file is JAR or the compressed file type within the ZIP archive is ***PowerShell***, ***Python***, ***Shell Script*** or a ***Windows/Linux Executable, pdvzip*** will give you the option to provide command-line arguments for your file, if required.  
+
+Make sure to enclose arguments containing spaces, such as file & directory names, within "quotation" marks. e.g.
+```console
+user1@linuxbox:~/Desktop$ ./pdvzip my_cover_image.png jdvrif_linux_executable.zip
+
+For this file type you can provide command-line arguments here, if required.
+
+Linux: -e ../my_cover_image.jpg "../my document file.pdf"
+
+```
+Also, be aware when using arguments for the compressed ZIP file types (not JAR), you are always working from within the subdirectory "***pdvzip_extracted***".  
+
+https://github.com/user-attachments/assets/9125d4e5-f94b-4d27-987e-fb2d76a90e8f
+
+To just get access to the file(s) within the ***ZIP*** archive, rename the '***.png***' file extension to '***.zip***'.  
+Treat the ***ZIP*** archive as read-only, do not add or remove files from the ***PNG-ZIP*** polyglot file.  
+
+## Executing Embedded JAR Files  
+
+***Linux Option 1:***
+```console
+user1@linuxbox:~/Desktop$ java -jar pjar_19662.png
+Note: If you use this method to run your embedded JAR file, you will have to manually add command-line
+      arguments (if required) to the end of the command, as your embedded arguments will not work with
+      this method. e.g.
+      user1@linuxbox:~/Desktop$ java -jar ./pjar_19662.png -u john_s -a 42 -f "John Smith"
+```
+***Linux Option 2a, using bash (or sh) shell environment:***
+```console
+user1@linuxbox:~/Desktop$ ./pjar_19662.png
+Note: This method will execute the embedded JAR file and also use any embedded
+      command-line arguments with the JAR program.
+```
+***Linux Option 2b, using any other shell environment, you will need to invoke bash (or sh) to execute the image:***
+```console
+linuxbox% bash ./pjar_19662.png
+```
+***Windows Option 1:***
+```console
+PS C:\Users\Nick\Desktop\jar_demo> java -jar .\pjar_19662.png 
+Note: If you use this method to run your embedded JAR file, you will have to manually add command-line
+      arguments (if required) to the end of the command, as your embedded arguments will not work with
+      this method. e.g.
+      PS C:\Users\Nick\Desktop\jar_demo> java -jar .\pjar_19662.png -u john_s -a 42 -f "John Smith"
+```
+***Windows Option 2:***
+```console
+PS C:\Users\Nick\Desktop\jar_demo> ren .\pjar_19662.png .\pjar_19662.cmd
+PS C:\Users\Nick\Desktop\jar_demo> .\pjar_19662.cmd
+Note: This method will execute the embedded JAR file and also use any
+      embedded command-line arguments with the JAR program.
+```
+https://github.com/user-attachments/assets/9451ad50-4c7c-4fa3-a1be-3854189bde00
 
 ## PNG Image Requirements for Arbitrary Data Preservation
 
-Bit depth 8-bit or lower (4,2,1) Indexed colour (PNG colour type value 3).  
+***PNG*** file size (image + archive file) must not exceed the hosting site's size limits.  
+The site will either refuse to upload your image or it will convert your image to ***jpg***, such as ***X/Twitter***.
 
-Image's multiplied dimensions value must be between 5,242,880 and 5,500,000.
-Suggested Width x Height Dimensions: 2900 x 1808 = 5,243,200. Example Two: 2290 x 2290 = 5,244,100, etc.
+***Dimensions:***
 
-Valid PNG chunk types that Twitter will preserve arbitrary data: ***bKGD, cHRM, gAMA, hIST, iCCP, pHYs, sBIT, sPLT, sRGB, tRNS***. We can also use an ***IDAT*** chunk type after the last image data IDAT chunk.  This program uses **hIST** & **IDAT** chunk types and removes the others.
+The following dimension size limits are specific to ***pdvzip*** and not necessarily the extact hosting site's size limits.
+These dimension size limits are for compatibility reasons, allowing it to work with all the above listed platforms.
 
-* Dimensions provide the storage capacity for our PNG image + arbitrary data. For example, 2900 x 1808 is 5,243,200, slightly over 5MB. This covers us for up to Twitter's 5MB size limit, same with other similar range dimension combinations (e.g. 2290 x 2290). Its pointless going too far over 5,242,880 for W x H dimensions, considering the 5MB PNG size limit.
+***PNG-32/24 (Truecolor)***
 
-* Bit depth setting of 8-bit or lower (4,2,1) Indexed colour (PNG colour type value 3), '*enables*' preservation of arbitrary data in the above 11 PNG chunk types.
+Image dimensions can be set between a minimum of **68 x 68** and a maximum of **899 x 899**.
 
-These settings are mostly the result of trial and error tinkering with PNG image files. As we can't see how the Twitter code is handling image configurations, we are unable to say why this works the way it does.
+*Note: Images that are created & saved within your image editor as ***PNG-32/24*** that are either
+black & white/grayscale, images with 256 colors or less, will be converted by ***X/Twitter*** to
+***PNG-8*** and you will lose the embedded content. If you want to use a simple "single" color
+***PNG-32/24*** image, then fill an area with a gradient color instead of a single solid color. 
+***X/Twitter*** should then keep the image as ***PNG-32/24***. [***(Example).***](https://twitter.com/CleasbyCode/status/1694992647121965554)*
+    
+***PNG-8 (Indexed-color)***
 
-## ZIP File Size & Other Important Information
+Image dimensions can be set between a minimum of **68 x 68** and a maximum of **4096 x 4096**.
+        
+***PNG Chunks:***  
 
-To work out the maximum ZIP file size, start with Twitter's size limit of 5MB (5,242,880 bytes),
-minus your PNG image size, minus 400 bytes (internal script size).  
+With ***X/Twitter***, for example, you can ***overfill*** the following ***PNG*** chunks with arbitrary data,  
+in which the platform will preserve as long as you keep within the image dimension & file size limits.  
+
+***bKGD, cHRM, gAMA, hIST,***  
+***iCCP,*** (Limited size chunk. Only **10KB** max. with ***X/Twitter***).  
+***IDAT,*** (Use as last ***IDAT*** chunk, after the final image ***IDAT*** chunk).  
+***PLTE,*** (Use only with ***PNG-32/24*** images).  
+***pHYs, sBIT, sPLT, sRGB,***   
+***tRNS. (Use only with ***PNG-32/24*** images).***  
+
+*Other platforms may differ in what chunks they preserve and which ones you can overfill.*
   
-Example: 5,242,880 - (307,200 + 400) = 4,935,280 bytes available 
-for your ZIP file.  
+pdvzip uses the chunks ***iCCP*** (stores extraction script) and ***IDAT*** (stores the ***ZIP/JAR*** file) for your arbitrary data.
 
-The less detailed your image, the more space available for the ZIP.
+## ***ZIP/JAR*** File Size & Other Important Information
 
-* Make sure your ZIP file is a standard ZIP archive, compatible with Linux unzip & Windows Explorer.  
-* Always use file extensions for your media file within the ZIP archive: *my_doc.pdf*, *my_video.mp4*, *my_program.py*, etc.  
-* Paint.net application is recommended for easily creating compatible PNG image files.
+To work out the maximum ***ZIP/JAR*** file size, start with the size limit, minus the image size, minus ***1500*** bytes (extraction script size).  
+  
+***X/Twitter*** example: (**5MB** limit) **5,242,880** - (**307,200** [image] + **1500** [extraction script]) = **4,934,180 bytes** available for your ***ZIP/JAR*** file.  
 
-**Video Example**
+* Make sure your ***ZIP/JAR*** file is a standard ***ZIP/JAR*** archive, compatible with ***Linux*** unzip & ***Windows*** Explorer.
+* Do not include more than one ***.zip*** file within the main ***ZIP*** archive. (***.rar*** files are ok).
+* Do not include other ***pdvzip*** created ***PNG*** image files within the main ***ZIP*** archive, as they are essentially ***.zip*** files.
+* Use file extensions for your file(s) within the ***ZIP*** archive: ***my_doc.pdf***, ***my_video.mp4***, ****my_program.py****, etc.
+  
+  A file without an extension within a ***ZIP*** archive will be considered a ***Linux*** executable.      
+* ***Paint.net*** application is recommended for easily creating compatible ***PNG*** image files.  
 
-[Paint.net: Configure Correct PNG Image Settings for PDVZIP](https://www.youtube.com/watch_popup?v=nMlUNdiaS88)
+## Third-Party Libraries
+
+This project includes the following third-party library:
+
+- **LodePNG** by Lode Vandevenne
+  - License: zlib/libpng (see [***LICENSE***](https://github.com/lvandeve/lodepng/blob/master/LICENSE) file)
+  - Copyright (c) 2005-2024 Lode Vandevenne
 
 ##
